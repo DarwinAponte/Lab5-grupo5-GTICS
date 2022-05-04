@@ -21,10 +21,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.formLogin()
                 .loginPage("/user/singIn")
                 .loginProcessingUrl("/processLogin")
-                .defaultSuccessUrl("/user/signInRedirect");
+                .defaultSuccessUrl("/user/signInRedirect",true);
 
         http.authorizeRequests()
-                .antMatchers("/juegos","/juegos/**").authenticated()
+                .antMatchers("/juegos","/juegos/**").hasAnyAuthority("ADMIN","USER")
+                .antMatchers("/plataformas","/plataformas/**").hasAnyAuthority("ADMIN")
+                .antMatchers("/distribuidoras","/distribuidoras/**").hasAnyAuthority("ADMIN")
                 .anyRequest().permitAll();
 
         http.logout()

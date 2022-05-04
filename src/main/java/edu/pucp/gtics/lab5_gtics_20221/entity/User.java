@@ -5,7 +5,7 @@ import java.io.Serializable;
 
 @Entity
 @Table(name="usuarios")
-public class User {
+public class User implements Serializable{
     @Id
     private int idusuario;
     private String apellidos;
@@ -14,6 +14,10 @@ public class User {
     private String password;
     private String autorizacion;
     private int enabled;
+
+    public String getNombreApellido() {
+        return nombres + " " + apellidos;
+    }
 
     public int getIdusuario() {
         return idusuario;

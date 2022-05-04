@@ -43,10 +43,22 @@ public class UserController {
                                  RedirectAttributes attributes,
                                  HttpSession session) {
 
+        String role="";
+        for(GrantedAuthority authority : auth.getAuthorities()){
+            role = authority.getAuthority();
+            break;
+        }
+
+
         User usuario = userRepository.findByCorreo(auth.getName());
         session.setAttribute("usuario", usuario);
 
-        return "redirect:/juegos/lista";
+        if(role.equals("ADMIN")){
+            return "redirect:/juegos/lista";
+        }else{
+            return "redirect:/juegos/lista";
+        }
+
     }
 
 }

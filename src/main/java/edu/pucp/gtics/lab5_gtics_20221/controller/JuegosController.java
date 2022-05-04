@@ -36,15 +36,15 @@ public class JuegosController {
     @Autowired
     UserRepository userRepository;
 
-//    @GetMapping(value = {"/juegos/lista"})
-//    public String listaJuegos (){
-//
-//    }
-//
-//    @GetMapping(value = {"", "/", "/vista"})
-//    public String vistaJuegos ( ){
-//
-//    }
+    @GetMapping(value = {"/juegos/lista"})
+    public String listaJuegos (){
+        return "juegos/vista";
+    }
+
+    @GetMapping(value = {"", "/", "/vista"})
+    public String vistaJuegos ( ){
+        return "juegos/vista";
+   }
 
     @GetMapping("/juegos/nuevo")
     public String nuevoJuegos(Model model, @ModelAttribute("juego") Juegos juego){
