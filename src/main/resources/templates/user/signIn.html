@@ -16,12 +16,14 @@
                     <div th:if="${param.error}" class="alert alert-danger" role="alert">
                         Acceso Denegado
                     </div>
-                    <form class="row g-3" method="post">
+                    <form th:action="@{/processLogin}" class="row g-3" method="post">
                         <div class="form-group">
-                            <label for="">Usuario</label>
+                            <label for="username">Usuario</label>
+                            <input type="email" class="form-control"  name="username" id="username" placeholder="Username" required autofocus>
                         </div>
                         <div class="form-group">
-                            <label for="">Contraseña</label>
+                            <label for="password">Contraseña</label>
+                            <input type="password" class="form-control"  name="password" id="password" placeholder="Password">
                         </div>
                         <div class="form-group">
                             <button type="submit" class="btn btn-primary btn-block">Ingresar</button>
