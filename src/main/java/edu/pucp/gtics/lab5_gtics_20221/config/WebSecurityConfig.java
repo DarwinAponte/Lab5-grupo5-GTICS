@@ -9,7 +9,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.sql.DataSource;
-import javax.xml.crypto.Data;
 
 @Configuration
 @EnableWebSecurity
@@ -26,9 +25,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .defaultSuccessUrl("/user/signInRedirect", true);
 
         http.authorizeRequests()
-                .antMatchers("/juegos","/juegos/**").hasAnyAuthority("ADMIN","USER")
-                .antMatchers("/plataformas","/plataformas/**").hasAnyAuthority("ADMIN")
-                .antMatchers("/distribuidoras","/distribuidoras/**").hasAnyAuthority("ADMIN")
+                .antMatchers("/juegos", "/juegos/**").hasAnyAuthority("ADMIN", "USER")
+                .antMatchers("/plataformas", "/plataformas/**").hasAnyAuthority("ADMIN")
+                .antMatchers("/distribuidoras", "/distribuidoras/**").hasAnyAuthority("ADMIN")
+                .antMatchers("/carrito", "/carrito/**").hasAnyAuthority("USER")
                 .anyRequest().permitAll();
 
         http.logout()

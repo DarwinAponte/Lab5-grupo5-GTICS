@@ -19,7 +19,6 @@ import java.util.List;
 import java.util.Optional;
 
 @Controller
-
 public class JuegosController {
 
     @Autowired
@@ -38,14 +37,11 @@ public class JuegosController {
     UserRepository userRepository;
 
     @GetMapping(value = {"/juegos/lista"})
-    public String listaJuegos (Model model, HttpSession session){
+    public String listaJuegos(Model model, HttpSession session) {
         User user = (User) session.getAttribute("usuario");
 
         if (user.getAutorizacion().equals("USER")) {
             model.addAttribute("listaJuegos", juegosRepository.obtenerJuegosPorUser(user.getIdusuario()));
-            for (JuegosUserDto juego : juegosRepository.obtenerJuegosPorUser(user.getIdusuario())){
-                System.out.println(juego.getNombre());
-            }
             return "juegos/comprado";
         } else { // ADMIN
             model.addAttribute("listaJuegos", juegosRepository.findAll(Sort.by("precio").ascending()));
@@ -55,19 +51,23 @@ public class JuegosController {
 
     // vista de juegos - General
     @GetMapping(value = {"", "/", "/vista"})
-    public String vistaJuegos (Model model, HttpSession session){
-        if (session.getAttribute("usuario") == null){
-            model.addAttribute("listaJuegos",juegosRepository.findAll(Sort.by("nombre").descending()));
-        } else {
+    public String vistaJuegos(Model model, HttpSession session) {
+        if (session.getAttribute("usuario") == null) { // No logueado
+            model.addAttribute("listaJuegos", juegosRepository.findAll(Sort.by("nombre").descending()));
+            return "juegos/vista";
+        } else { // Logueado
             User user = (User) session.getAttribute("usuario");
-            model.addAttribute("listaJuegos",juegosRepository.obtenerJuegosNoCompradosPorUser(user.getIdusuario()));
+            if (user.getAutorizacion().equals("ADMIN")) {
+                return "redirect:/user/signInRedirect"; // ADMIN no tiene la vista "vista", ADMIN tiene /juegos/lista
+            } else { // USER
+                model.addAttribute("listaJuegos", juegosRepository.obtenerJuegosNoCompradosPorUser(user.getIdusuario()));
+                return "juegos/vista";
+            }
         }
-
-        return "juegos/vista";
-   }
+    }
 
     @GetMapping("/juegos/nuevo")
-    public String nuevoJuegos(Model model, @ModelAttribute("juego") Juegos juego){
+    public String nuevoJuegos(Model model, @ModelAttribute("juego") Juegos juego) {
         List<Plataformas> listaPlataformas = plataformasRepository.findAll();
         List<Distribuidoras> listaDistribuidoras = distribuidorasRepository.findAll();
         List<Generos> listaGeneros = generosRepository.findAll();
@@ -78,26 +78,27 @@ public class JuegosController {
     }
 
     @GetMapping("/juegos/editar")
-    public String editarJuegos(@RequestParam("id") int id, Model model){
+    public String editarJuegos(@RequestParam("id") int id, Model model) {
         Optional<Juegos> opt = juegosRepository.findById(id);
         List<Plataformas> listaPlataformas = plataformasRepository.findAll();
         List<Distribuidoras> listaDistribuidoras = distribuidorasRepository.findAll();
         List<Generos> listaGeneros = generosRepository.findAll();
-        if (opt.isPresent()){
+        if (opt.isPresent()) {
             Juegos juego = opt.get();
             model.addAttribute("juego", juego);
             model.addAttribute("listaPlataformas", listaPlataformas);
             model.addAttribute("listaDistribuidoras", listaDistribuidoras);
             model.addAttribute("listaGeneros", listaGeneros);
             return "juegos/editarFrm";
-        }else {
+        } else {
             return "redirect:/juegos/lista";
         }
     }
 
     @PostMapping("/juegos/guardar")
-    public String guardarJuegos(Model model, RedirectAttributes attr, @ModelAttribute("juego") @Valid Juegos juego, BindingResult bindingResult ){
-        if(bindingResult.hasErrors( )){
+    public String guardarJuegos(Model model, RedirectAttributes attr, @ModelAttribute("juego") @Valid Juegos
+            juego, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
             List<Plataformas> listaPlataformas = plataformasRepository.findAll();
             List<Distribuidoras> listaDistribuidoras = distribuidorasRepository.findAll();
             List<Generos> listaGeneros = generosRepository.findAll();
@@ -120,16 +121,12 @@ public class JuegosController {
     }
 
     @GetMapping("/juegos/borrar")
-    public String borrarDistribuidora(@RequestParam("id") int id){
+    public String borrarDistribuidora(@RequestParam("id") int id) {
         Optional<Juegos> opt = juegosRepository.findById(id);
         if (opt.isPresent()) {
             juegosRepository.deleteById(id);
         }
         return "redirect:/juegos/lista";
     }
-
-
-
-
 
 }

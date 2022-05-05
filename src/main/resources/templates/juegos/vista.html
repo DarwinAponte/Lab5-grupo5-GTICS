@@ -14,13 +14,18 @@
                         <div class="page-header text-center">
                             <h1>Lista de Juegos</h1>
                         </div>
+                        <div th:if="${msg != null}" class="alert alert-success alert-dismissible fade show" role="alert">
+                            <i class="bi bi-check-circle-fill"></i>
+                            <span th:text="${msg}"></span>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
                         <div class="container-fluid">
                             <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 card-app">
                                 <div class="col mb-4" th:each="juego, index : ${listaJuegos}">
                                     <div class="card">
                                         <img class="card-img-top" alt="Card image cap" th:src="${juego.image}">
                                         <span class="position-absolute top-100 end-0 translate-middle badge bg-danger fs-6"
-                                              th:text="${juego.precio}"></span>
+                                              th:text="'$ ' + ${juego.precio}"></span>
                                         <a sec:authorize="hasAnyAuthority('ADMIN','USER')" class="btn btn-primary"
                                            th:title="Comprar"
                                            th:href="@{'/carrito/anadir?id=' + ${juego.idjuego}}"><span

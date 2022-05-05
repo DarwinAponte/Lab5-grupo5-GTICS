@@ -21,6 +21,7 @@
                             <li class="nav-item" sec:authorize="hasAnyAuthority('ADMIN','USER')">
                                 <a class="nav-link" th:classappend="${option == 'Vista'}?'active' :''"
                                    th:href="@{/user/signInRedirect}">Juegos</a>
+                                <!--El /user/signInRedict enviará a /juegos/lista al ADMIN y a /vista a USER-->
                             </li>
                             <li class="nav-item" sec:authorize="hasAnyAuthority('USER')">
                                 <a class="nav-link" th:classappend="${option == 'Juegos'}?'active' :''"
@@ -44,7 +45,8 @@
                         </ul>
                         <ul class="navbar-nav" sec:authorize="isAuthenticated()">
                             <li class="nav-item">
-                                <a sec:authorize="hasAnyAuthority('USER')" class="nav-link" th:href="@{/carrito/lista}" th:title="|Carrito de Compras|">
+                                <a sec:authorize="hasAnyAuthority('USER')" class="nav-link" th:href="@{/carrito/lista}"
+                                   th:title="|Carrito de Compras|">
                                     <i class="bi bi-cart3 position-relative" style="font-size: 20px;">
                                         <span class="position-absolute top-100 start-100 translate-middle badge p-1 rounded-pill bg-danger"
                                               style="font-size: 10px;" th:text="${session.ncarrito}"></span>
