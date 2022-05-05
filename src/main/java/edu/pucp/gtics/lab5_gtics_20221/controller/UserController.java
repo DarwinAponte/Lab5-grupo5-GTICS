@@ -34,7 +34,7 @@ public class UserController {
 
     @GetMapping("/signIn")
     public String signIn() {
-        return "/user/signIn";
+        return "user/signIn";
     }
 
 
@@ -56,7 +56,7 @@ public class UserController {
         if(role.equals("ADMIN")){
             return "redirect:/juegos/lista";
         }else{
-            return "redirect:/juegos/lista";
+            return "redirect:/vista";
         }
 
     }

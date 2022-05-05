@@ -12,6 +12,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
@@ -37,12 +38,31 @@ public class JuegosController {
     UserRepository userRepository;
 
     @GetMapping(value = {"/juegos/lista"})
-    public String listaJuegos (){
-        return "juegos/vista";
+    public String listaJuegos (Model model, HttpSession session){
+        User user = (User) session.getAttribute("usuario");
+
+        if (user.getAutorizacion().equals("USER")) {
+            model.addAttribute("listaJuegos", juegosRepository.obtenerJuegosPorUser(user.getIdusuario()));
+            for (JuegosUserDto juego : juegosRepository.obtenerJuegosPorUser(user.getIdusuario())){
+                System.out.println(juego.getNombre());
+            }
+            return "juegos/comprado";
+        } else { // ADMIN
+            model.addAttribute("listaJuegos", juegosRepository.findAll(Sort.by("precio").ascending()));
+            return "juegos/lista";
+        }
     }
 
+    // vista de juegos - General
     @GetMapping(value = {"", "/", "/vista"})
-    public String vistaJuegos ( ){
+    public String vistaJuegos (Model model, HttpSession session){
+        if (session.getAttribute("usuario") == null){
+            model.addAttribute("listaJuegos",juegosRepository.findAll(Sort.by("nombre").descending()));
+        } else {
+            User user = (User) session.getAttribute("usuario");
+            model.addAttribute("listaJuegos",juegosRepository.obtenerJuegosNoCompradosPorUser(user.getIdusuario()));
+        }
+
         return "juegos/vista";
    }
 
