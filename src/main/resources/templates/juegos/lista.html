@@ -33,11 +33,25 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr">
+                        <tr th:each="juego, info : ${listaJuegos}">
+                            <td th:text="${info.index + 1}"></td>
+                            <td><img th:src="${juego.image}" style="max-height: 200px; max-width: 150px"></td>
+                            <td ><span th:text="${juego.nombre} "></span>
+                                <span class="badge bg-warning text-dark" th:text="${juego.genero.nombre}" > </span>
+                            </td>
 
-                        <td><a class="btn btn-primary" th:title="Editar" ><span class="bi bi-pencil-square"></span></a></td>
-                        <td><a class="btn btn-danger" th:title="Borrar" ><span class="bi bi-trash"></span></a></td>
-                    </tr>
+                            <td th:text="${juego.descripcion}"></td>
+                            <td th:text="${juego.plataforma.nombre}"></td>
+                            <td th:text="${juego.distribuidora.nombre}"></td>
+                            <td th:text="${juego.precio}"></td>
+
+                            <td><a class="btn btn-primary" th:title="Editar"
+                                   th:href="@{'/juegos/editar?id=' + ${juego.idjuego}}"><span
+                                    class="bi bi-pencil-square"></span></a></td>
+                            <td><a class="btn btn-danger" th:title="Borrar"
+                                   th:href="@{'/juegos/borrar?id=' + ${juego.idjuego}}"><span
+                                    class="bi bi-trash"></span></a></td>
+                        </tr>
                     </tbody>
                 </table>
 
