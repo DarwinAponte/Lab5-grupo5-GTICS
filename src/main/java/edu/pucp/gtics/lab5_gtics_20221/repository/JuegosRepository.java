@@ -23,9 +23,4 @@ public interface JuegosRepository extends JpaRepository<Juegos,Integer> {
             "where idjuego not in\n" +
             "(select idjuego from juegosxusuario where idusuario = ?1) order by nombre DESC ",nativeQuery = true)
     List<Juegos> obtenerJuegosNoCompradosPorUser(int idusuario);
-
-    @Transactional
-    @Modifying
-    @Query(value = "Insert INTO juegosxusuario (idusuario, idjuego, cantidad) VALUES (?,?,1)", nativeQuery = true)
-    void registrarJuegoPorUser(int idusuario, int idjuego);
 }
