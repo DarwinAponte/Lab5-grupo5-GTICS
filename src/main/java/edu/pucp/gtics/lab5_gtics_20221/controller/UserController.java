@@ -43,8 +43,8 @@ public class UserController {
                                  RedirectAttributes attributes,
                                  HttpSession session) {
 
-        String role="";
-        for(GrantedAuthority authority : auth.getAuthorities()){
+        String role = "";
+        for (GrantedAuthority authority : auth.getAuthorities()) {
             role = authority.getAuthority();
             break;
         }
@@ -53,9 +53,13 @@ public class UserController {
         User usuario = userRepository.findByCorreo(auth.getName());
         session.setAttribute("usuario", usuario);
 
-        if(role.equals("ADMIN")){
+        if (role.equals("ADMIN")) {
             return "redirect:/juegos/lista";
-        }else{
+        } else {
+            // Carrito y ncarrito se inicializan al iniciar la sesión de usuario
+            ArrayList<Juegos> carrito = new ArrayList<>();
+            session.setAttribute("carrito", carrito);
+            session.setAttribute("ncarrito", carrito.size());
             return "redirect:/vista";
         }
 
